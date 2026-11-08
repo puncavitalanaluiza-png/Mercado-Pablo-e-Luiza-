@@ -1,1 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado Pablo e Luiza</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4faf5;
+  color: #183b29;
+}
+header {
+  background: #176b45;
+  color: white;
+  padding: 22px;
+  text-align: center;
+}
+header h1 { margin: 0; }
+header p { margin-bottom: 0; }
+.hero {
+  padding: 35px 20px;
+  text-align: center;
+  background: linear-gradient(135deg,#d9f5df,#fff0d9);
+}
+.hero h2 { font-size: 29px; }
+.hero button, .add {
+  background: #176b45;
+  color: white;
+  border: 0;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+section { padding: 20px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 3px 12px #0001;
+}
+.emoji { font-size: 42px; }
+.price { color: #176b45; font-weight: bold; }
+#cart {
+  background: white;
+  padding: 18px;
+  border-radius: 15px;
+}
+footer {
+  background: #176b45;
+  color: white;
+  padding: 22px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
 
+<header>
+  <h1>🛒 Mercado Pablo e Luiza</h1>
+  <p>Seu mercado online!</p>
+</header>
+
+<div class="hero">
+  <h2>Ofertas especiais para você!</h2>
+  <p>Faça suas compras sem sair de casa.</p>
+  <button onclick="document.getElementById('produtos').scrollIntoView()">
+    Comprar agora
+  </button>
+</div>
+
+<section id="produtos">
+  <h2>🛍️ Nossos produtos</h2>
+  <div class="grid" id="lista"></div>
+</section>
+
+<section>
+  <h2>🛒 Meu carrinho</h2>
+  <div id="cart">
+    <div id="itens">Seu carrinho está vazio.</div>
+    <h3>Total: R$ <span id="total">0,00</span></h3>
+    <button class="add" onclick="finalizar()">Finalizar pedido</button>
+  </div>
+</section>
+
+<footer>
+  Mercado Pablo e Luiza 💚
+  <p>Obrigado pela preferência!</p>
+</footer>
+
+<script>
+const produtos = [
+  {nome:"Arroz",preco:25,emoji:"🍚"},
+  {nome:"Feijão",preco:8,emoji:"🫘"},
+  {nome:"Leite",preco:6,emoji:"🥛"},
+  {nome:"Pão",preco:9,emoji:"🥖"},
+  {nome:"Maçã",preco:7,emoji:"🍎"},
+  {nome:"Ovos",preco:15,emoji:"🥚"}
+];
+
+let carrinho = [];
+
+function dinheiro(n) {
+  return n.toFixed(2).replace(".",",");
+}
+
+function mostrarProdutos() {
+  document.getElementById("lista").innerHTML =
+  produtos.map((p,i)=>`
+    <div class="card">
+      <div class="emoji">${p.emoji}</div>
+      <h3>${p.nome}</h3>
+      <p class="price">R$ ${dinheiro(p.preco)}</p>
+      <button class="add" onclick="adicionar(${i})">
+        Adicionar +
+      </button>
+    </div>
+  `).join("");
+}
+
+function adicionar(i) {
+  carrinho.push(produtos[i]);
+  mostrarCarrinho();
+}
+
+function mostrarCarrinho() {
+  let total = 0;
+  document.getElementById("itens").innerHTML =
+  carrinho.length ? carrinho.map(p=>{
+    total += p.preco;
+    return `<p>${p.emoji} ${p.nome} — R$ ${dinheiro(p.preco)}</p>`;
+  }).join("") : "Seu carrinho está vazio.";
+  document.getElementById("total").textContent = dinheiro(total);
+}
+
+function finalizar() {
+  if (!carrinho.length) {
+    alert("Adicione produtos primeiro!");
+    return;
+  }
+  const pedido = carrinho.map(p=>p.nome).join(", ");
+  alert("Pedido preparado: "+pedido+
+  ". Entre em contato com o responsável pelo mercado para combinar a entrega e o Pix.");
+}
+
+mostrarProdutos();
+</script>
+
+</body>
+</html>
